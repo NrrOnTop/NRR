@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NRR</title>
+
+    <style>
+        /* General styling */
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Background image with reduced blur */
+        body::before {
+            content: "";
+            background-image: url('https://i.ibb.co/LQBtbHB/image.png');
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: blur(2px);
+            z-index: -2;
+            opacity: 0.7;
+        }
+
+        /* Slow red rain effect */
+        .rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .raindrop {
+            position: absolute;
+            background-color: red;
+            width: 2px;
+            height: 20px;
+            animation: rainFall 8s linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes rainFall {
+            0% { top: -20px; }
+            100% { top: 100vh; }
+        }
+
+        h1 {
+            font-size: 4em;
+            color: #8B0000;
+            text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px darkred;
+            margin: 20px 0;
+            animation: bloodPulse 2s infinite;
+        }
+
+        /* Floating blood effect for title */
+        @keyframes bloodPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .scary-text {
+            font-family: 'Creepster', cursive;
+            color: #FF0000;
+            font-size: 1.5em;
+            text-align: center;
+            margin-top: 20px;
+            text-shadow: 2px 2px black;
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        /* Fade-in effect */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Menu button styling */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1.2em;
+            z-index: 2;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Full-screen menu overlay */
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Menu items */
+        .menu-overlay .menu-item {
+            margin: 20px 0;
+            font-size: 2em;
+            cursor: pointer;
+            color: red;
+            text-align: center;
+        }
+
+        .menu-overlay .menu-item:hover {
+            color: white;
+        }
+
+        /* Info boxes */
+        .info-box {
+            display: none;
+            padding: 20px;
+            background-color: black;
+            border: 2px solid red;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        function toggleMenu() {
+            const overlay = document.getElementById('menu-overlay');
+            overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
+            playSound();
+        }
+
+        function showInfo() {
+            document.getElementById('info-box').style.display = 'block';
+            document.getElementById('join-box').style.display = 'none';
+            document.getElementById('menu-overlay').style.display = 'none';
+            playSound();
+        }
+
+        function showJoinInfo() {
+            document.getElementById('join-box').style.display = 'block';
+            document.getElementById('info-box').style.display = 'none';
+            document.getElementById('menu-overlay').style.display = 'none';
+            playSound();
+        }
+
+        function showHome() {
+            document.getElementById('info-box').style.display = 'none';
+            document.getElementById('join-box').style.display = 'none';
+            document.getElementById('dynamic-text').style.display = 'block';
+            document.getElementById('menu-overlay').style.display = 'none';
+            playSound();
+        }
+
+        function playSound() {
+            const sound = new Audio('https://www.soundjay.com/button/sounds/button-3.mp3');
+            sound.play();
+        }
+
+        window.onload = () => {
+            createRain();
+            changeDynamicText();
+        };
+
+        function createRain() {
+            const rainContainer = document.querySelector('.rain');
+            const numberOfDrops = 100;
+
+            for (let i = 0; i < numberOfDrops; i++) {
+                const raindrop = document.createElement('div');
+                raindrop.classList.add('raindrop');
+                raindrop.style.left = `${Math.random() * 100}%`;
+                raindrop.style.animationDuration = `${Math.random() * 6 + 5}s`;
+                rainContainer.appendChild(raindrop);
+            }
+        }
+
+        function changeDynamicText() {
+            const messages = [
+                "We’re thrilled you dare to join us...",
+                "Beware, NRR is not gonna show mercy...",
+                "Only the strongest will survive the NRR test.",
+                "Join us... or watch as we take over.",
+                "Darkness grows as NRR takes control."
+            ];
+
+            let currentMessageIndex = 0;
+            const textElement = document.getElementById('dynamic-text');
+
+            setInterval(() => {
+                textElement.textContent = messages[currentMessageIndex];
+                currentMessageIndex = (currentMessageIndex + 1) % messages.length;
+            }, 4000); // Change message every 4 seconds
+        }
+    </script>
+</head>
+<body>
+
+    <div class="rain"></div>
+    <h1>NRR</h1>
+    <div id="dynamic-text" class="scary-text">We’re thrilled you dare to join us...</div>
+    <div class="menu-btn" onclick="toggleMenu()">Menu</div>
+
+    <div id="menu-overlay" class="menu-overlay">
+        <div class="menu-item" onclick="showHome()">Home</div>
+        <div class="menu-item" onclick="showInfo()">Information</div>
+        <div class="menu-item" onclick="showJoinInfo()">Join Us</div>
+        <div class="menu-item"><a href="https://discord.gg/63hudrRUht" style="color: red; text-decoration: none;">Contact</a></div>
+    </div>
+
+    <div id="info-box" class="info-box">
+        <p><strong>What is NRR?</strong></p>
+        <p>NRR means <strong>No Realm Remains</strong>, is a relentless Minecraft team with a mission to dominate. Led by <strong>vortexghost</strong>, NRR takes over realms, uncovers exploits, and leaves a haunting mark across the Minecraft community. Dare to join, or watch NRR’s legend grow.</p>
+    </div>
+
+    <div id="join-box" class="info-box">
+        <p><strong>How to Join Team NRR?</strong></p>
+        <p>Want to be a part of the chaos? To join NRR, head to the <strong>Contact</strong> link in the menu and join our Discord. Once inside, follow the instructions to open a ticket. But beware—there’s no going back...</p>
+    </div>
+
+</body>
+</html>
