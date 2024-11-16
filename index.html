@@ -3,237 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NRR</title>
+    <title>NRR - No Realm Remains</title>
     <style>
-        /* General styling */
         body {
-            background-color: black;
-            color: white;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Background image */
-        body::before {
-            content: "";
-            background-image: url('https://i.ibb.co/LQBtbHB/image.png');
+            background-image: url('https://i.ibb.co/X7PN925/Screenshot-2024-11-14-143901.png');
             background-size: cover;
             background-position: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .background-effect {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.3;
-            z-index: -2;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+            filter: blur(10px);
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+            margin-top: 10%;
         }
 
         h1 {
-            font-size: 4em;
-            color: #8B0000;
-            text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px darkred;
-            margin: 20px 0;
-            animation: heartbeat 1.2s infinite alternate;
+            font-size: 4rem;
+            color: red;
+            text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red;
         }
 
-        /* Heartbeat animation for title */
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .scary-text {
-            font-family: 'Creepster', cursive;
-            color: #FF0000;
-            font-size: 1.5em;
-            text-align: center;
+        .buttons {
             margin-top: 20px;
-            text-shadow: 2px 2px black;
-            animation: fadeIn 3s ease-in-out;
         }
 
-        /* Fade-in effect */
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+        .button {
+            padding: 10px 30px;
+            margin: 10px;
+            background-color: #8b0000;
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
 
-        /* Compact menu */
-        .top-menu {
+        .button:hover {
+            background-color: #e60000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-content {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 2;
-            font-size: 1.2em;
-            display: flex;
-            gap: 15px;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 8px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            width: 80%;
+            max-width: 900px;
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            display: none;
+            overflow-y: auto;
+            height: 60vh;
         }
 
-        .top-menu a {
+        .info-content h2 {
+            font-size: 2.5rem;
+            color: red;
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            background-color: #8b0000;
             color: white;
             text-decoration: none;
-            font-size: 1.2em;
-            padding: 10px 15px;
-            background-color: transparent;
             border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            transition: background-color 0.3s;
+            font-size: 1.2rem;
+            margin-top: 20px;
         }
 
-        .top-menu a:hover {
-            background-color: rgba(255, 0, 0, 0.7);
-            color: black;
+        .back-button:hover {
+            background-color: #e60000;
         }
 
-        .top-menu a img {
-            margin-right: 10px;
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Information Tab */
-        .info-tab {
-            display: none;
-            width: 100%;
-            max-width: 800px;
-            background-color: rgba(0, 0, 0, 0.8);
-            border-radius: 10px;
-            padding: 40px;
-            text-align: center;
-            z-index: 2;
-            position: relative;
-            animation: fadeIn 1s ease;
-            margin-top: 30px;
-        }
-
-        .info-tab p {
-            font-size: 1.5em;
-            color: #FFFFFF;
-            margin: 20px 0;
-        }
-
-        .back-btn {
+        .footer {
             position: absolute;
-            top: 20px;
+            bottom: 20px;
             left: 20px;
             color: white;
-            background-color: red;
-            padding: 10px 15px;
-            font-size: 1.1em;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            cursor: pointer;
-            transition: background-color 0.3s;
+            font-size: 1rem;
+            text-shadow: 0 0 10px red;
         }
 
-        .back-btn:hover {
-            background-color: darkred;
-        }
-
-        /* Hide the main page when in info tab */
-        .main-page {
-            display: block;
-        }
-
-        .info-tab-active {
-            display: block;
-        }
-
-        .home-content {
-            display: block;
-        }
-
-        .hidden-content {
-            display: none;
-        }
     </style>
-
-    <script>
-        function playSound() {
-            const sound = new Audio('https://www.soundjay.com/button/sounds/button-3.mp3');
-            sound.play();
-        }
-
-        window.onload = () => {
-            changeDynamicText();
-        };
-
-        function changeDynamicText() {
-            const messages = [
-                "We’re thrilled you dare to join us...",
-                "Beware, NRR is not gonna show mercy...",
-                "Only the strongest will survive the NRR test.",
-                "Join us... or watch as we take over.",
-                "Darkness grows as NRR takes control."
-            ];
-
-            let currentMessageIndex = 0;
-            const textElement = document.getElementById('dynamic-text');
-
-            setInterval(() => {
-                textElement.textContent = messages[currentMessageIndex];
-                currentMessageIndex = (currentMessageIndex + 1) % messages.length;
-            }, 4000); // Change message every 4 seconds
-        }
-
-        // Show the information tab
-        function showInfo() {
-            // Hide all main content
-            document.getElementById("home").classList.add("hidden-content");
-            document.getElementById("dynamic-text").classList.add("hidden-content");
-            
-            // Show information
-            document.getElementById("info-box").classList.add("info-tab-active");
-        }
-
-        // Go back to home page
-        function goBackHome() {
-            document.getElementById("info-box").classList.remove("info-tab-active");
-
-            // Show main content again
-            document.getElementById("home").classList.remove("hidden-content");
-            document.getElementById("dynamic-text").classList.remove("hidden-content");
-        }
-    </script>
 </head>
 <body>
 
-    <h1>NRR</h1>
-    <div id="dynamic-text" class="scary-text">We’re thrilled you dare to join us...</div>
-    
-    <div class="top-menu">
-        <a href="https://discord.gg/gYGwpbCwFF" target="_blank">
-            <img src="https://img.icons8.com/ios/50/ffffff/discord-logo.png" alt="Discord Icon"> Discord
-        </a>
-        <a href="https://www.youtube.com/@NrrOnTop" target="_blank">
-            <img src="https://img.icons8.com/ios/50/ffffff/youtube-play.png" alt="YouTube Icon"> YouTube
-        </a>
-        <a href="#" onclick="showInfo()">Information</a>
+    <div class="background-effect"></div>
+
+    <div class="content">
+        <h1>NRR - No Realm Remains</h1>
+        <div class="buttons">
+            <a href="https://www.youtube.com/@NrrOnTop" target="_blank" class="button">YouTube</a>
+            <a href="https://discord.gg/gYGwpbCwFF" target="_blank" class="button">Discord</a>
+            <button onclick="openInfo()" class="button">Information</button>
+        </div>
     </div>
 
-    <!-- Main page content -->
-    <div id="home" class="home-content">
-        <div class="scary-text">Join the NRR team and take over Minecraft realms with us.</div>
+    <div class="info-content" id="infoContent">
+        <h2>NRR - No Realm Remains</h2>
+        <p>NRR is a team with a single goal: destruction. We are focused on wiping out realms, leaving nothing but ashes in our wake. We will dominate, and no one will stand in our way.</p>
+        <p>Our team is built on strength, strategy, and relentless pursuit of victory. Join us and witness the fall of realms, one by one.</p>
+        <p>We are more than just players; we are the harbingers of the end. Only those with the courage to stand beside us will see the true power of NRR.</p>
+        <p>We have no mercy. We are the storm that sweeps through the land. The realm will tremble before us. The end is near. Prepare for the NRR purge.</p>
+        <p>With each realm we take, our power grows stronger. Join us, or fall before us. The choice is yours.</p>
+        <a href="#" onclick="closeInfo()" class="back-button">Back to Home</a>
     </div>
 
-    <!-- Information tab -->
-    <div id="info-box" class="info-tab">
-        <button class="back-btn" onclick="goBackHome()">Back to Home</button>
-        <p><strong>About NRR</strong></p>
-        <p>NRR stands for <strong>No Realm Remains</strong>. It’s a powerful team made to dominate Minecraft realms and crush any resistance. Our members are skilled players (dont even got much yet lol), unrelenting and unstoppable.</p>
-        <p>This site and the project are created by <strong>vortexghostt</strong>, a passionate gamer and coder. We aim to bring together the best to conquer Minecraft!</p>
-        <p>Get ready to experience the most intense Minecraft gameplay ever!</p>
+    <div class="footer">
+        © NRR 2024 - All rights reserved.
     </div>
 
+    <script>
+        function openInfo() {
+            document.querySelector('.content').style.display = 'none';
+            document.getElementById('infoContent').style.display = 'block';
+        }
+
+        function closeInfo() {
+            document.querySelector('.content').style.display = 'block';
+            document.getElementById('infoContent').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
