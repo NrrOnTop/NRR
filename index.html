@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NRR</title>
-
     <style>
         /* General styling */
         body {
@@ -14,14 +13,13 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
 
-        /* Background image with reduced blur */
+        /* Background image */
         body::before {
             content: "";
             background-image: url('https://i.ibb.co/LQBtbHB/image.png');
@@ -32,34 +30,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            filter: blur(2px);
+            opacity: 0.3;
             z-index: -2;
-            opacity: 0.7;
-        }
-
-        /* Slow red rain effect */
-        .rain {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .raindrop {
-            position: absolute;
-            background-color: red;
-            width: 2px;
-            height: 20px;
-            animation: rainFall 8s linear infinite;
-            opacity: 0.8;
-        }
-
-        @keyframes rainFall {
-            0% { top: -20px; }
-            100% { top: 100vh; }
         }
 
         h1 {
@@ -67,13 +39,14 @@
             color: #8B0000;
             text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px darkred;
             margin: 20px 0;
-            animation: bloodPulse 2s infinite;
+            animation: heartbeat 1.2s infinite alternate;
         }
 
-        /* Floating blood effect for title */
-        @keyframes bloodPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        /* Heartbeat animation for title */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         .scary-text {
@@ -92,120 +65,108 @@
             100% { opacity: 1; }
         }
 
-        /* Menu button styling */
-        .menu-btn {
-            position: fixed;
+        /* Compact menu */
+        .top-menu {
+            position: absolute;
             top: 20px;
             left: 20px;
-            background-color: red;
-            color: white;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 1.2em;
             z-index: 2;
-            animation: fadeIn 1s ease-in-out;
+            font-size: 1.2em;
+            display: flex;
+            gap: 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
         }
 
-        /* Full-screen menu overlay */
-        .menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+        .top-menu a {
             color: white;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(0); }
-        }
-
-        /* Menu items */
-        .menu-overlay .menu-item {
-            margin: 20px 0;
-            font-size: 2em;
-            cursor: pointer;
-            color: red;
-            text-align: center;
-        }
-
-        .menu-overlay .menu-item:hover {
-            color: white;
-        }
-
-        /* Info boxes */
-        .info-box {
-            display: none;
-            padding: 20px;
-            background-color: black;
-            border: 2px solid red;
+            text-decoration: none;
+            font-size: 1.2em;
+            padding: 10px 15px;
+            background-color: transparent;
             border-radius: 5px;
-            width: 80%;
-            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s;
+        }
+
+        .top-menu a:hover {
+            background-color: rgba(255, 0, 0, 0.7);
+            color: black;
+        }
+
+        .top-menu a img {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Information Tab */
+        .info-tab {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 40px;
             text-align: center;
+            z-index: 2;
+            position: relative;
+            animation: fadeIn 1s ease;
+            margin-top: 30px;
+        }
+
+        .info-tab p {
+            font-size: 1.5em;
+            color: #FFFFFF;
+            margin: 20px 0;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            background-color: red;
+            padding: 10px 15px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: darkred;
+        }
+
+        /* Hide the main page when in info tab */
+        .main-page {
+            display: block;
+        }
+
+        .info-tab-active {
+            display: block;
+        }
+
+        .home-content {
+            display: block;
+        }
+
+        .hidden-content {
+            display: none;
         }
     </style>
 
     <script>
-        function toggleMenu() {
-            const overlay = document.getElementById('menu-overlay');
-            overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
-            playSound();
-        }
-
-        function showInfo() {
-            document.getElementById('info-box').style.display = 'block';
-            document.getElementById('join-box').style.display = 'none';
-            document.getElementById('menu-overlay').style.display = 'none';
-            playSound();
-        }
-
-        function showJoinInfo() {
-            document.getElementById('join-box').style.display = 'block';
-            document.getElementById('info-box').style.display = 'none';
-            document.getElementById('menu-overlay').style.display = 'none';
-            playSound();
-        }
-
-        function showHome() {
-            document.getElementById('info-box').style.display = 'none';
-            document.getElementById('join-box').style.display = 'none';
-            document.getElementById('dynamic-text').style.display = 'block';
-            document.getElementById('menu-overlay').style.display = 'none';
-            playSound();
-        }
-
         function playSound() {
             const sound = new Audio('https://www.soundjay.com/button/sounds/button-3.mp3');
             sound.play();
         }
 
         window.onload = () => {
-            createRain();
             changeDynamicText();
         };
-
-        function createRain() {
-            const rainContainer = document.querySelector('.rain');
-            const numberOfDrops = 100;
-
-            for (let i = 0; i < numberOfDrops; i++) {
-                const raindrop = document.createElement('div');
-                raindrop.classList.add('raindrop');
-                raindrop.style.left = `${Math.random() * 100}%`;
-                raindrop.style.animationDuration = `${Math.random() * 6 + 5}s`;
-                rainContainer.appendChild(raindrop);
-            }
-        }
 
         function changeDynamicText() {
             const messages = [
@@ -224,30 +185,54 @@
                 currentMessageIndex = (currentMessageIndex + 1) % messages.length;
             }, 4000); // Change message every 4 seconds
         }
+
+        // Show the information tab
+        function showInfo() {
+            // Hide all main content
+            document.getElementById("home").classList.add("hidden-content");
+            document.getElementById("dynamic-text").classList.add("hidden-content");
+            
+            // Show information
+            document.getElementById("info-box").classList.add("info-tab-active");
+        }
+
+        // Go back to home page
+        function goBackHome() {
+            document.getElementById("info-box").classList.remove("info-tab-active");
+
+            // Show main content again
+            document.getElementById("home").classList.remove("hidden-content");
+            document.getElementById("dynamic-text").classList.remove("hidden-content");
+        }
     </script>
 </head>
 <body>
 
-    <div class="rain"></div>
     <h1>NRR</h1>
     <div id="dynamic-text" class="scary-text">We’re thrilled you dare to join us...</div>
-    <div class="menu-btn" onclick="toggleMenu()">Menu</div>
-
-    <div id="menu-overlay" class="menu-overlay">
-        <div class="menu-item" onclick="showHome()">Home</div>
-        <div class="menu-item" onclick="showInfo()">Information</div>
-        <div class="menu-item" onclick="showJoinInfo()">Join Us</div>
-        <div class="menu-item"><a href="https://discord.gg/63hudrRUht" style="color: red; text-decoration: none;">Contact</a></div>
+    
+    <div class="top-menu">
+        <a href="https://discord.gg/gYGwpbCwFF" target="_blank">
+            <img src="https://img.icons8.com/ios/50/ffffff/discord-logo.png" alt="Discord Icon"> Discord
+        </a>
+        <a href="https://www.youtube.com/@NrrOnTop" target="_blank">
+            <img src="https://img.icons8.com/ios/50/ffffff/youtube-play.png" alt="YouTube Icon"> YouTube
+        </a>
+        <a href="#" onclick="showInfo()">Information</a>
     </div>
 
-    <div id="info-box" class="info-box">
-        <p><strong>What is NRR?</strong></p>
-        <p>NRR means <strong>No Realm Remains</strong>, is a relentless Minecraft team with a mission to dominate. Led by <strong>vortexghost</strong>, NRR takes over realms, uncovers exploits, and leaves a haunting mark across the Minecraft community. Dare to join, or watch NRR’s legend grow.</p>
+    <!-- Main page content -->
+    <div id="home" class="home-content">
+        <div class="scary-text">Join the NRR team and take over Minecraft realms with us.</div>
     </div>
 
-    <div id="join-box" class="info-box">
-        <p><strong>How to Join Team NRR?</strong></p>
-        <p>Want to be a part of the chaos? To join NRR, head to the <strong>Contact</strong> link in the menu and join our Discord. Once inside, follow the instructions to open a ticket. But beware—there’s no going back...</p>
+    <!-- Information tab -->
+    <div id="info-box" class="info-tab">
+        <button class="back-btn" onclick="goBackHome()">Back to Home</button>
+        <p><strong>About NRR</strong></p>
+        <p>NRR stands for <strong>No Realm Remains</strong>. It’s a powerful team made to dominate Minecraft realms and crush any resistance. Our members are skilled players (dont even got much yet lol), unrelenting and unstoppable.</p>
+        <p>This site and the project are created by <strong>vortexghostt</strong>, a passionate gamer and coder. We aim to bring together the best to conquer Minecraft!</p>
+        <p>Get ready to experience the most intense Minecraft gameplay ever!</p>
     </div>
 
 </body>
